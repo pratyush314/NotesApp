@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiTrash2 as TrashIcon } from "react-icons/fi";
 import { formatDistanceToNow } from "date-fns";
+
+const env = import.meta.env;
 const NoteList = () => {
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -9,7 +11,7 @@ const NoteList = () => {
   const fetchNotes = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/notes");
+      const response = await axios.get(`${env.VITE_BACKEND_URL}/notes`);
       setNotes(response.data);
     } catch (err) {
       console.error("Error fetching notes:", err);
@@ -23,7 +25,7 @@ const NoteList = () => {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/notes/${id}`);
+      await axios.delete(`${env.VITE_BACKEND_URL}/notes/${id}`);
       fetchNotes();
     } catch (err) {
       console.error("Error deleting note:", err);
